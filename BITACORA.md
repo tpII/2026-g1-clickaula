@@ -31,3 +31,11 @@ Investigamos acerca de los servicios de la Raspberry Pi que van a proveer la red
 - El lease deberia ser corto (aprox. 1hs) para que los pulsadores que se desconectan vuelvan a recibir la misma IP y no pidan una nueva.
 - Vamos a necesitar una estrategia para medir en que channel se va a crear la red WiFi para tener la mejor calidad de conexion posible. Medir canales 1, 6 y 11 (Los unicos que no se solapan en 2.4GHz)
 - Vamos a tener que definir bien el orden de arranque de los servicios para que funcionen (hostapd, dnsmasq, mosquitto)
+
+### 19/09/2026
+
+Se avanzó con el armado del entorno de simulación que va a reemplazar al hardware mientras se construyen los pulsadores. Se está levantando el broker Mosquitto en contenedor —donde surgió que por defecto sólo escucha en localhost y rechaza conexiones anónimas, así que hay que declarar el listener y habilitarlas de forma explícita— junto con un simulador que reproduce el comportamiento previsto del pulsador: presencia retenida con latido, mensaje de última voluntad, y votos con QoS 1 y número de secuencia. La idea es poder variar la cantidad de nodos, el porcentaje de acierto y la demora de respuesta, para ensayar desde 2 pulsadores hasta un aula completa.
+
+### 21/09/2026
+
+En una primera prueba contra el simulador apareció un punto a revisar en la deduplicación de votos: como el número de secuencia de cada pulsador arranca de cero cuando el nodo se reinicia, existe el riesgo de que la aplicación lo confunda con un reenvío de QoS 1 y descarte votos válidos. Con hardware real podría dispararse ante cualquier reinicio por batería o reset accidental. Queda por definir si conviene acotar la ventana de deduplicación a la pregunta en curso o agregar un identificador de arranque al mensaje.
