@@ -12,9 +12,8 @@ Investigamos sobre el diseño del protocolo de mensajería MQTT (árbol de temas
 
 Investigamos sobre los requerimientos de alimentación del pulsador (consumo del ESP8266 en reposo y en transmisión, y dimensionamiento de un regulador dedicado de 5 V a 3.3 V)
 
-
 ### 06/09/2026
- 
+
 Investigamos sobre el entorno de desarrollo de la aplicación con Docker (Mosquitto como contenedor y un simulador de pulsadores)
 
 Se avanzo con la creaion del documento "Plan de Proyecto" y su powerpoint.
@@ -25,7 +24,8 @@ Se entregó el documento "Plan de Proyecto" junto con su presentación. El docum
 
 ### 15/09/2026
 
-Investigamos acerca de los servicios de la Raspberry Pi que van a proveer la red WiFi a los pulsadores y se encontraron posibles trabas a resolver: 
+Investigamos acerca de los servicios de la Raspberry Pi que van a proveer la red WiFi a los pulsadores y se encontraron posibles trabas a resolver:
+
 - Existen reportes de la Raspberry Pi 3/3B+ congelandose alrededor de los 20 dispositivos conectados, no es una limitacion de codigo sino de HW (driver brcmfac), se puede solucionar con adaptador de red externo.
 - Raspberry Pi OS Bookworm paso a NetworkManager, por lo cual 'dhcpcd.conf' ya no se lee. Se puede usar NetworkManager o hostapd + dnsmasq clasico sacando 'wlan0' de NetworkManager y manejarlo a mano.
 - El lease deberia ser corto (aprox. 1hs) para que los pulsadores que se desconectan vuelvan a recibir la misma IP y no pidan una nueva.
@@ -39,3 +39,7 @@ Se avanzó con el armado del entorno de simulación que va a reemplazar al hardw
 ### 21/09/2026
 
 En una primera prueba contra el simulador apareció un punto a revisar en la deduplicación de votos: como el número de secuencia de cada pulsador arranca de cero cuando el nodo se reinicia, existe el riesgo de que la aplicación lo confunda con un reenvío de QoS 1 y descarte votos válidos. Con hardware real podría dispararse ante cualquier reinicio por batería o reset accidental. Queda por definir si conviene acotar la ventana de deduplicación a la pregunta en curso o agregar un identificador de arranque al mensaje.
+
+### 25/09/2026
+
+Antes de automatizar nada se probó el contrato de mensajería a mano, por línea de comandos, publicando con `mosquitto_pub` y observando todo el tráfico con `mosquitto_sub -t 'aula/#' -v`. Se dio de alta un pulsador publicando su presencia retenida y se lo vio aparecer en la sala de espera, se emitieron votos con QoS 1 y número de secuencia, y se verificaron los cuatro motivos de descarte previstos: voto sin pregunta abierta, opción que esa pregunta no tiene, segundo voto del mismo pulsador y reenvío con la misma secuencia. También se simuló la caída de un nodo publicando `online:false`, que es exactamente lo que hace el broker con el mensaje de última voluntad. La conclusión es que el contrato se puede ejercitar completo sin una sola línea de firmware, lo que deja al grupo de hardware con una referencia concreta contra la cual programar.
