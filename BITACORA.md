@@ -43,3 +43,11 @@ En una primera prueba contra el simulador apareció un punto a revisar en la ded
 ### 25/09/2026
 
 Antes de automatizar nada se probó el contrato de mensajería a mano, por línea de comandos, publicando con `mosquitto_pub` y observando todo el tráfico con `mosquitto_sub -t 'aula/#' -v`. Se dio de alta un pulsador publicando su presencia retenida y se lo vio aparecer en la sala de espera, se emitieron votos con QoS 1 y número de secuencia, y se verificaron los cuatro motivos de descarte previstos: voto sin pregunta abierta, opción que esa pregunta no tiene, segundo voto del mismo pulsador y reenvío con la misma secuencia. También se simuló la caída de un nodo publicando `online:false`, que es exactamente lo que hace el broker con el mensaje de última voluntad. La conclusión es que el contrato se puede ejercitar completo sin una sola línea de firmware, lo que deja al grupo de hardware con una referencia concreta contra la cual programar.
+
+### 28/09/2026
+
+Quedó andando el entorno de simulación sobre Docker: tres contenedores —broker Mosquitto, aplicación y pulsadores simulados— que se levantan con un único comando. Los pulsadores se conectan solos, aparecen en la sala de espera y votan dentro de la ventana, y el tablero refleja cada voto en el momento en que llega. Se corroboró la sincronización entre las partes: la pregunta se abre y se cierra por temporizador del lado del servidor, los votos que llegan fuera de esa ventana se descartan, el cierre ocurre aunque no haya ninguna pantalla abierta, y la grilla muestra en vivo qué pulsadores ya respondieron. Se ensayaron las dos modalidades de punta a punta con 8 pulsadores y se escaló hasta 30 para una primera prueba de carga, sin pérdida de votos. Queda pendiente el ajuste de deduplicación anotado el 23/09.
+
+### 29/09/2026
+
+Dejamos sentada una diferencia real entre el simulador y un pulsador de verdad. El simulador sabe cuándo hay una pregunta abierta porque le pregunta a la aplicación por HTTP cada segundo y medio. Un NodeMCU no puede hacer eso: es publicador puro, no recibe nada. El pulsador real aprieta y publica siempre, y es la app la que descarta lo que llega fuera de ventana.
