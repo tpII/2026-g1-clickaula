@@ -51,3 +51,11 @@ Quedó andando el entorno de simulación sobre Docker: tres contenedores —brok
 ### 29/09/2026
 
 Dejamos sentada una diferencia real entre el simulador y un pulsador de verdad. El simulador sabe cuándo hay una pregunta abierta porque le pregunta a la aplicación por HTTP cada segundo y medio. Un NodeMCU no puede hacer eso: es publicador puro, no recibe nada. El pulsador real aprieta y publica siempre, y es la app la que descarta lo que llega fuera de ventana.
+
+### 30/10/2026
+
+Definimos el hardware necesario para el proyecto y realizamos el pedido a la catedra
+
+### 01/10/2026
+
+Nos fue entregado el hardware y se realizó una demostracion presencial acerca del conexionado y las decisiones sobre el broker, que es quien toma las decisiones con respecto a los mensajes (no asi el pulsador).
