@@ -1,174 +1,222 @@
 # Chequeo de formato — G1 ClickAula — Informe de Avance (octubre)
 
-Archivo: `Informe_Avance_G1_ClickAula.pdf` · 25 páginas · generado con Google Docs · Chequeo: 2026-10-07
+Archivo: `Informe_Avance_G1_ClickAula.pdf` · 21 páginas · generado con Google Docs · Chequeo: 2026-10-07 (3ª pasada)
 Estado: **con 12 puntos a corregir**
 
 ## Resumen
 
-La tipografía y el lenguaje están en regla y son lo más difícil de arreglar a último momento:
-Times New Roman 12 pt, interlineado 1,5 real (1,72× el tamaño de fuente), 93 % de las líneas
-justificadas, y cero apariciones de primera persona o voseo en todo el cuerpo. Las nueve
-tablas y las siete figuras tienen epígrafe numerado debajo y están referenciadas desde el
-texto. La bibliografía existe, está completa y tiene fecha de consulta en cada entrada. La
-sección 1.2 documenta de manera explícita las correcciones aplicadas tras la devolución del
-Plan, lo que facilita la corrección.
+La parte de formato está casi resuelta. **Los tres índices se regeneraron y pasaron de 32
+referencias de página equivocadas a una sola.** La pasada de cursivas quedó completa (*broker*
+9/9, *hardware* 8/8, *protoboard* 7/7, *software* 5/5), la terminología se unificó —
+«intermediario» desapareció del documento y «placas de pruebas» pasó a «*protoboards*» —, la
+cita [7] quedó bien colocada y los tres marcadores `[completar]` se reemplazaron por enlaces.
 
-Lo que falta es, sobre todo, cierre. El documento tiene 16 marcadores `[completar]` sin
-resolver: toda la columna de costos de la Tabla 4, el total del presupuesto y los tres enlaces
-de la sección 5.3. Con eso, las secciones "Materiales y Presupuesto" y "Enlaces" no están
-entregables. Después hay un conjunto de desajustes entre los índices y el cuerpo (números de
-tabla cruzados, cuatro páginas mal), una cita que apunta a la referencia equivocada, y el
-registro de los textos que están *dentro* de las figuras, que quedó sin revisar y contrasta con
-el del cuerpo.
+El problema de esta pasada ya no es tipográfico sino de **coherencia**: la actualización del
+estado de los materiales se aplicó en la sección 2.2 pero no se propagó al resto del informe, y
+además introdujo una contradicción de fondo. **La Tabla 4 lista una Raspberry Pi 3 modelo B o B+
+y una microSD de 16 GB; catorce líneas más abajo, la sección 2.2 dice que lo que se recibió es
+una Raspberry Pi Zero W y una microSD de 32 GB.** Son dos placas distintas, y todo el informe
+—el esquema de la Figura 1, los consumos de la Tabla 8, el análisis de obstáculos de la sección
+4.5— está escrito sobre la Pi 3. Mientras tanto, cuatro secciones siguen diciendo que los
+materiales no llegaron.
+
+Hay además un desprendimiento tipográfico visible: el número «4.6» quedó pegado al final del
+párrafo anterior y el título de esa sección perdió su numeración.
 
 ## Puntos a corregir
 
-1. **Marcadores `[completar]` sin resolver — 16 en total.** Es lo más visible y lo primero que
-   mira la corrección.
-   - Tabla 4 (p.8): las 12 celdas de "Costo unitario", las 12 de "Referencia" y la celda
-     "Total". La sección se titula "Materiales y Presupuesto" y hoy no tiene presupuesto.
-   - Sección 5.3 (p.24): "Video de demostración. [completar con el enlace al video]",
-     "Bitácora del proyecto. [completar con el enlace a la bitácora]", "Repositorio de código
-     fuente. [completar con el enlace al repositorio]".
-   - Al cargar los tres enlaces, la URL tiene que quedar **visible como texto**, no como un
-     "chip" de Google Docs ni como palabra con hipervínculo: el PDF impreso o abierto en un
-     visor sin links la pierde. En Google Docs, pegar la URL y elegir "Mantener como texto sin
-     formato" cuando ofrece convertirla en chip.
+1. **Contradicción de materiales dentro de la misma página 8.** Es el punto más grave y el único
+   que no se arregla moviendo texto.
 
-2. **Índice de tablas: los números 6, 7 y 8 no coinciden con el cuerpo** (p.3). El índice dice:
+   | | Tabla 4 (p.8) | Sección 2.2 (p.8) |
+   |---|---|---|
+   | Placa | Raspberry Pi 3 modelo B o B+ | **Raspberry Pi Zero W** |
+   | Tarjeta | microSD de **16 GB** clase 10 | microSD de **32 GB** |
+   | Adaptadores | no figuran | USB-A a microUSB, miniHDMI a HDMI |
 
-   | Índice de tablas (p.3) | Cuerpo real |
-   |---|---|
-   | Tabla 6. Requerimientos de consumo… p.14 | Tabla 6. Grado de avance por componente (p.13) |
-   | Tabla 7. Grado de avance por componente… p.13 | Tabla 7. Estado de las tareas comprometidas (p.13) |
-   | Tabla 8. Estado de las tareas comprometidas… p.13 | Tabla 8. Requerimientos de consumo (p.14) |
+   Si la placa efectivamente es una **Pi Zero W**, el cambio no es de inventario: arrastra al
+   resto del informe y hay que decidirlo antes de seguir editando.
+   - **Tabla 8** (p.13) estima «Raspberry Pi 3 en modo punto de acceso: 400 a 700 mA, pico 1,2 A»
+     y de ahí sale el total del sistema. Una Zero W consume bastante menos; el número y el total
+     quedan mal.
+   - **Sección 4.5** (p.17) discute el bloqueo del controlador inalámbrico «en torno a los veinte
+     dispositivos asociados». Ese dato se relevó para la Pi 3. Sobre otra placa hay que
+     verificarlo de nuevo, y es justo el riesgo que condiciona el requerimiento RNF-2 (treinta
+     pulsadores concurrentes).
+   - **Figura 1** (p.9) rotula el bloque central como «Raspberry Pi 3».
+   - **Tabla 4** debería listar lo que realmente se va a usar, y el total recalcularse.
 
-   El cuerpo está bien numerado y correlativo; el error está sólo en el índice, que además
-   quedó desordenado por página (14, 13, 13). Reescribir esas tres entradas en el orden 6, 7, 8
-   con las leyendas y páginas del cuerpo.
+   Si en cambio la Zero W es provisoria y la Pi 3 se compra igual, eso hay que escribirlo: hoy el
+   informe no lo dice y las dos páginas se contradicen sin explicación.
 
-3. **Índice general: tres páginas equivocadas** (p.2). La numeración impresa coincide con la
-   del PDF, así que no hay corrimiento que justifique la diferencia:
-   - «3.3 Protocolo de mensajería» → el índice dice 11, está en la **12**.
-   - «5.3 Enlaces» → el índice dice 23, está en la **24**.
-   - «6.- Bibliografía» → el índice dice 24, está en la **25**.
+2. **La sección 2.2 quedó incompleta y desconectada del resto.** El texto nuevo dice qué llegó,
+   pero perdió cuatro cosas que tenía la versión anterior y que el informe necesita:
+   - **la fecha de recepción** (sin ella no se puede fechar nada de la Tabla 9);
+   - **si lo recibido cubre lo solicitado** — hoy el lector tiene que comparar a mano contra la
+     Tabla 4 para descubrir que faltan ocho pulsadores, dos baterías, los gabinetes, la fuente y
+     el estaño;
+   - **el cruce a las secciones 4.2 y 4.6**, que la versión anterior tenía y que ataba el estado
+     de provisión al cronograma;
+   - **la consecuencia de «el resto de los componentes serán adquiridos por parte del grupo»**:
+     sin fecha, sin monto y sin decir qué pasa con el total de $291.511 de la Tabla 4, que ahora
+     incluye componentes provistos por la cátedra y componentes a cargo del grupo mezclados.
 
-4. **Índice de figuras: una página equivocada** (p.2). «Figura 6. Resultados de una pregunta…»
-   → el índice dice 22, el epígrafe está en la **23**.
+   Una redacción posible: «Los materiales fueron solicitados a la cátedra por los canales
+   institucionales. El **[FECHA]** se recibió una parte del pedido: **[lista]**. Los componentes
+   restantes de la Tabla 4 —**[lista]**— serán adquiridos por el grupo antes del **[FECHA]**, por
+   un monto de **[$]**. El estado de provisión condiciona las tareas detalladas en las secciones
+   4.2 y 4.6.»
 
-5. **La referencia [7] está mal aplicada** (p.19). En 4.5, la frase «existen reportes de bloqueo
-   del controlador inalámbrico de la Raspberry Pi 3 en torno a los veinte dispositivos
-   asociados, limitación de hardware que se resuelve con un adaptador externo [7]» cita el
-   manual de configuración de Mosquitto, que no habla de eso. El propio informe lo reconoce en
-   la nota al pie de la bibliografía, pero la nota no arregla el marcador: el lector ve una
-   afirmación respaldada por una fuente que no la respalda. Dos arreglos:
-   - Quitar el `[7]` de esa frase, o reemplazarlo por la cita real (el issue del repositorio del
-     kernel de Raspberry Pi y los hilos del foro oficial, que es de donde sale el dato).
-   - Agregar `[7]` donde sí corresponde: el párrafo «Configuración por omisión del intermediario
-     de mensajes» (pp.18-19), que hoy describe el comportamiento de Mosquitto 2 sin citar nada.
+3. **Cuatro lugares siguen diciendo que los materiales no llegaron**, en contradicción con 2.2:
 
-6. **Carátula sin fecha completa** (p.1). Dice «Octubre de 2026»; se pide día, mes y año.
-   Agregar el día de entrega. En la misma página, faltan dos tildes en los nombres: «Valentin
-   Ventos» → Valentín, «Joaquin Labarta» → Joaquín.
+   | Pág. | Dónde | Qué dice |
+   |---|---|---|
+   | 11 | Tabla 6, fila Raspberry Pi | «La implementación comienza con la recepción del equipamiento» |
+   | 12 | 4.3, *Hardware* probado | «A la fecha de este informe no se ha probado ningún componente físico» — sin explicar por qué, ahora que hay dos NodeMCU y una placa disponibles |
+   | 12 | 4.3, cierre | «deberán contrastarse con mediciones una vez que se disponga del equipamiento» |
+   | 17-18 | 4.6, párrafo y Tabla 9 | «Las restantes comienzan con la recepción de los materiales», y siete filas con plazos «desde la recepción de los materiales» |
 
-7. **Las leyendas del índice de figuras no reproducen los epígrafes, y de forma despareja**
-   (p.2). Las Figuras 1, 2 y 3 aparecen truncadas antes de los dos puntos («Figura 1. Esquema
-   general de ClickAula», cuando el epígrafe sigue «: nodos publicadores, punto de acceso e
-   intermediario de mensajes, y aplicación suscriptora»), mientras que las Figuras 4, 6 y 7
-   figuran con la leyenda completa. Unificar: o todas completas, o todas recortadas con el mismo
-   criterio. Lo mismo vale para el índice de tablas, que omite el punto final de los epígrafes.
+   La Tabla 9 además quedó internamente incoherente: la columna **Dependencia** dice «Ninguna»
+   para *Firmware* del pulsador y para la configuración de la Raspberry Pi, pero la columna
+   **Plazo previsto** de esas mismas filas sigue siendo relativa a un hito que, según «Ninguna»,
+   ya no aplica. Con la fecha de recepción del punto 2, esos plazos se convierten en fechas de
+   calendario y el problema desaparece.
 
-8. **El registro de los textos dentro de las figuras no se revisó.** El cuerpo está impecable,
-   pero las imágenes contradicen ese registro y son parte del documento:
-   - **Voseo en la Figura 3** (p.21): la interfaz muestra «Escribí la pregunta» y, dos veces,
-     «Opción (podés dejarla vacía)».
-   - **«broker» en las Figuras 1, 3, 4 y 6** (pp.10, 21, 23): en los rótulos del diagrama
-     («Mosquitto (broker)») y en el encabezado de la aplicación («broker conectado»), mientras
-     el cuerpo dice siempre «intermediario de mensajes».
-   - **«protoboard» y «pull-ups» en la Figura 2** (p.11), cuando el cuerpo usa «placa de
-     pruebas» y «resistencias de elevación interna».
-   - **Coloquialismo en la Figura 2**: «el botón sólo une sus dos patas cuando se la aprieta».
-   Las Figuras 1 y 2 son de producción propia, así que se regeneran. Las capturas de pantalla
-   (3, 4, 6) dependen de la interfaz: el arreglo de fondo es cambiar los textos de la aplicación
-   y volver a capturar, lo que además deja la interfaz consistente con el informe.
+4. **El número «4.6» quedó pegado al párrafo anterior** (p.17). El texto termina «…para
+   seleccionar el de mejor calidad.**4.6**» y el título de la sección siguiente queda como
+   «Planificación de las partes faltantes», sin numerar. En Google Docs: cortar el «4.6» del final
+   del párrafo, poner el cursor delante de «Planificación» y escribirlo ahí, verificando que la
+   línea tenga aplicado el estilo de subtítulo. Después hay que regenerar el índice general, que
+   hoy muestra «4.6 Planificación de las partes faltantes» correctamente sólo por casualidad.
 
-9. **«firmware» va en cursiva una sola vez de seis.** Está en cursiva en p.5 y en redonda en
-   p.7, p.12, p.15 (dos veces, una en el título 4.4.1) y p.24. «hardware» y «software» están
-   siempre en redonda. Elegir un criterio y aplicarlo a las tres palabras en todo el documento;
-   el defecto concreto es la inconsistencia, no cuál de los dos criterios se elija.
+5. **La sección 4.5 perdió el problema de la demora.** La versión anterior abría con «Entrega de
+   materiales pendiente. Es el factor de mayor impacto sobre el cronograma…» y ese párrafo se
+   eliminó. Un informe de avance tiene que registrar los desvíos y sus causas: la demora ocurrió,
+   condicionó cuatro tareas durante semanas y se resolvió parcialmente. Conviene reponerlo como
+   problema resuelto, no borrarlo — sobre todo porque la sección 4.6 todavía habla de «la
+   recepción de los materiales» como si el lector supiera de qué se trata.
 
-10. **Legibilidad de la Figura 2** (p.11). El diagrama principal se lee bien, pero el bloque
-    «3 · Resumen de conexiones» y la línea de notas al pie quedan muy por debajo del tamaño
-    mínimo legible al imprimir. Dos opciones: exportar la figura a mayor resolución y ampliarla,
-    o sacar ese resumen de la imagen y ponerlo como tabla real del informe, con su epígrafe
-    «Tabla N» — que además lo vuelve seleccionable y buscable.
+6. **Los tres enlaces de la sección 5.3 no muestran la URL** (pp.20-21). Dicen «Link», «Enlace a
+   BITACORA.md» y «Enlace al Repositorio», con el hipervínculo detrás. Las URLs están en el PDF
+   —`https://drive.google.com/drive/u/0/folders/1e6SOL-…`,
+   `https://github.com/tpII/2026-g1-clickaula/blob/main/BITACORA.md` y
+   `https://github.com/tpII/2026-g1-clickaula`— pero son invisibles al imprimir o en un visor sin
+   links, que es exactamente lo que la corrección señala. Hay que escribir la URL como texto
+   visible. Además «Link» es un anglicismo evitable: «Video de demostración.
+   https://drive.google.com/…».
 
-11. **Tres páginas mayormente vacías.** La p.9 queda con tres líneas (95 % en blanco) por el
-    cierre de 2.3; la p.22 con poco menos de la mitad vacía porque la Figura 6 se fue entera a
-    la p.23; la p.24 al 75 % por la sección 5.3. Es un punto menor, pero se marca. Ajustar el
-    tamaño de la Figura 6 para que entre en la p.22, o dejar que el texto fluya.
+7. **La sección 5.2 quedó reducida a una oración sin motivo** (p.20): «No se incluyen fotografías
+   de partes físicas construidas.» La versión anterior explicaba por qué y remitía a la Figura 2;
+   al recortarla se perdió una de las dos referencias a esa figura. O se explica el motivo y la
+   fecha prevista de armado, o —si ya montaron algo con los dos NodeMCU recibidos— acá van las
+   fotos, como Figuras 8 en adelante con su epígrafe y su entrada en el índice de figuras.
 
-12. **Las sub-subsecciones 4.4.1 a 4.4.4 están a 12 pt**, el mismo cuerpo del texto, y sólo se
-    distinguen por la negrita. Las secciones van a 15 pt y las subsecciones a 13 pt. Bajar el
-    nivel 3 a un escalón intermedio propio (12,5 pt, o 12 pt en versalitas) haría la jerarquía
-    visible de un vistazo. Es lo más menor de la lista.
+8. **Una página mal en el índice general** (p.2): «5.3 Enlaces» dice 21 y está en la **20**. Es la
+   única de las 32 que quedó. Los índices de figuras y de tablas están ahora correctos en las
+   dieciséis entradas.
+
+9. **La entrada de la Figura 3 en el índice de figuras no coincide con el epígrafe** (p.2):
+
+   - índice: «Editor de encuestas**:alta** de preguntas con sus opciones y **respuesta** correcta.»
+   - epígrafe: «Editor de encuestas**: alta** de preguntas con sus opciones y **la** respuesta correcta.»
+
+   Falta el espacio después de los dos puntos, falta «la», y sobra el punto final que las otras
+   seis entradas no llevan.
+
+10. **Residuos de puntuación y fechas:**
+    - Tabla 7 (p.12): dos celdas sin punto final, «Falta implementar en Raspberry» y «Falta
+      implementar en NodeMCU», mientras las otras cinco lo llevan. La primera además dice
+      «Raspberry» a secas.
+    - El epígrafe de la Tabla 7 sigue fijando el corte «al 6 de octubre de 2026» mientras la
+      carátula dice 11 de octubre. Unificar la fecha de corte.
+    - Tildes faltantes en la carátula (p.1): «Valentin Ventos» → Valentín, «Joaquin Labarta» →
+      Joaquín. Viene de las dos pasadas anteriores.
+    - Una aparición de *firmware* quedó en redonda: Tabla 6, p.11, «Comienza con el porteo de la
+      simulación al firmware». Las otras ocho están en cursiva.
+
+11. **Voseo dentro de la Figura 3** (p.18), sin cambios. La captura del editor sigue mostrando
+    «Escribí la pregunta» y, dos veces, «Opción (podés dejarla vacía)». Es el único voseo del
+    documento; se corrige cambiando los textos de la aplicación y volviendo a capturar.
+
+12. **Las Figuras 1 y 2 siguen sin regenerarse**, y ahora el desfase con el cuerpo es mayor:
+    - **Figura 1** (p.9) rotula el bloque central «Punto de acceso e **intermediario**». Esa
+      palabra ya no existe en ninguna parte del texto —se reemplazó por *broker* en las nueve
+      apariciones— así que la figura es el único lugar donde sobrevive. Y además rotula «Raspberry
+      Pi 3» (ver punto 1).
+    - **Figura 2** (p.10): «riel azul **del** protoboard» (el cuerpo usa femenino, «la
+      *protoboard*»), «**pull-ups** internos» en plural y sin cursiva, y el coloquialismo «el
+      botón sólo une sus dos patas cuando **se la aprieta**». Sigue además el problema de
+      legibilidad del bloque «3 · Resumen de conexiones» y de la línea de notas al pie, que
+      conviene sacar de la imagen y poner como tabla del informe.
 
 ## Para que lo mire alguien del grupo
 
-- **Carátula sin la plantilla de la cátedra** (p.1). El Plan de Proyecto usaba el bloque
-  «TALLER DE PROYECTO 2 / INGENIERÍA EN COMPUTACIÓN» con los logos de la Facultad y de la UNLP;
-  este informe no lo tiene. La plantilla no es obligatoria según el criterio de forma, pero si
-  la cátedra la pide para todas las entregas, conviene recuperarla del Plan.
-- **Los cinco bloques de código en el cuerpo** (pp.15-18, en Consolas 8,5 pt). Son extractos
-  cortos y cada uno viene explicado, así que no son "páginas de código" que deberían ir a un
-  anexo. Además los títulos de 4.4 parecen venir de la plantilla del informe. Confirmar contra
-  la plantilla que ese es el lugar previsto.
-- **p.24 y p.25**: el análisis automático marcó interlineado y justificado fuera de norma en
-  esas dos páginas. Mirándolas, parecen falsos positivos — son páginas con pocos párrafos
-  largos (5.3 son tres líneas sueltas; la bibliografía son entradas con sangría), y la medición
-  no tuvo líneas suficientes. Verificar a ojo y, si se ven bien, ignorar.
+- **El reclamo sobre el límite de dispositivos asociados** (p.17) sigue sin cita propia, con la
+  nota de la bibliografía declarándolo. Es honesto, pero si la placa pasó a ser una Zero W el dato
+  además cambia de objeto (ver punto 1).
+- **La columna «Referencia» de la Tabla 4** dice «MercadoLibre» en las doce filas. Ahora que parte
+  de los componentes llegó de la cátedra y parte la compra el grupo, esa columna podría distinguir
+  las dos procedencias.
+- **Carátula sin la plantilla de la cátedra**, igual que en las pasadas anteriores. El Plan de
+  Proyecto usaba el bloque con los logos de la Facultad y la UNLP.
+- **Los cinco bloques de código en el cuerpo** (pp.13-16, Consolas 8,5 pt): extractos cortos y
+  explicados, no «páginas de código» de anexo. Confirmar contra la plantilla del informe.
+- **Las sub-subsecciones 4.4.1 a 4.4.4 siguen a 12 pt**, el mismo cuerpo del texto. Punto menor.
 
 ## Lo que está bien y hay que conservar
 
-- **El lenguaje.** Cero apariciones de primera persona, voseo o coloquialismos en 25 páginas.
-  Construcciones impersonales consistentes («se decidió», «se optó», «se resolvió», «el grupo no
-  dispone»). Es lo que más pesa en la corrección y lo más caro de arreglar después.
-- **Las siglas**, todas definidas en su primer uso: MQTT (Message Queuing Telemetry Transport),
-  QoS (Quality of Service), IoT (Internet of Things), SSE (Server-Sent Events).
-- **Tipografía**: Times New Roman 12 pt, interlineado 1,5 medido en 1,72× (el valor real de
-  Word/Docs, no el «1,15» que se confunde con 1,5), justificado en el 93 % de las líneas. Los
-  tamaños menores aparecen sólo donde corresponde: epígrafes 9,5 pt, tablas 10 pt y código 8,5 pt.
-- **Epígrafes**: los 16 (9 tablas + 7 figuras) están debajo del objeto, numerados, con leyenda
-  descriptiva y referenciados por número desde el texto. Las dos numeraciones son independientes
-  y correlativas desde 1.
-- **Bibliografía**: siete entradas con autor, título en cursiva, URL y fecha de consulta.
-- **Requerimientos numerados** (RF-1 a RF-7, RNF-1 a RNF-6, RT-1 a RT-5) y efectivamente
-  referenciados desde el texto (RNF-1, RNF-4, RT-1, RT-5, RF-2, RF-3).
-- **Números de página** en todas las páginas salvo la carátula, coincidentes con los índices.
-- **La sección 1.2** enumera una por una las correcciones aplicadas tras la devolución del Plan.
+- **Los tres índices**, regenerados y correctos salvo una entrada. El de figuras y el de tablas
+  coinciden en las dieciséis páginas.
+- **El lenguaje del cuerpo**: cero primera persona, voseo o coloquialismos en 21 páginas. El único
+  voseo está dentro de una captura.
+- **Las cursivas de anglicismos**, completas salvo una aparición, y aplicadas también en títulos,
+  celdas de tabla y entradas en negrita, que era lo que faltaba en la pasada anterior.
+- **La terminología unificada**: *broker* en las nueve apariciones, *protoboard* en las siete,
+  sin convivencia con los términos viejos.
+- **Tipografía**: Times New Roman 12 pt, interlineado 1,5 real (1,72×), justificado al 84 %.
+- **Epígrafes**: los 16 debajo del objeto, numerados y referenciados desde el texto.
+- **Bibliografía**: siete entradas con autor, título en cursiva, URL y fecha de consulta; la
+  cita [7] ahora bien colocada, antes del punto y con espacio.
+- **Números de página** coincidentes con los índices, sin corrimiento.
+
+## Qué cambió desde el chequeo anterior
+
+**Resuelto (8 de 11):**
+
+| # anterior | Punto | Cómo quedó |
+|---|---|---|
+| 1 | 32 referencias de página mal | ✅ quedó **una** (punto 8) |
+| 2 | Tres `[completar]` en 5.3 | ⚠️ reemplazados por enlaces, pero sin URL visible (punto 6) |
+| 3 | Dos leyendas recortadas en el índice | ⚠️ Tabla 8 corregida; Figura 3 quedó distinta otra vez (punto 9) |
+| 4 | Cursivas faltantes en títulos, negritas y celdas | ✅ siete de ocho resueltas; queda una (punto 10) |
+| 5 | Términos viejos y nuevos conviviendo | ✅ «intermediario» y «placas de pruebas» eliminados |
+| 6 | Cita [7] pegada al punto | ✅ «…sin salida a internet [7].» |
+| 7 | Tildes en la carátula | ❌ sin cambios (punto 10) |
+| 8 | Voseo en la Figura 3 | ❌ sin cambios (punto 11) |
+| 9 | Figuras 1 y 2 sin regenerar | ❌ sin cambios, y el desfase creció (punto 12) |
+| 10 | Legibilidad de la Figura 2 | ❌ sin cambios |
+| 11 | Páginas con mucho blanco | ✅ el documento bajó de 23 a 21 páginas |
+
+**Nuevo en esta pasada:** la contradicción Pi 3 / Pi Zero W y el inventario incompleto (puntos 1
+y 2), las cuatro secciones que siguen diciendo que no llegaron los materiales (punto 3), el «4.6»
+desprendido del título (punto 4), la pérdida del problema de la demora en 4.5 (punto 5), la
+sección 5.2 reducida a una oración (punto 7) y los residuos de puntuación de la Tabla 7 (punto 10).
 
 ## Detalle por criterio
 
 | Criterio | Estado | Observación |
 |---|---|---|
-| Carátula | ❌ | Materia, tipo de entrega, proyecto, grupo e integrantes con legajo, sola en la p.1. Falta el día en la fecha; faltan tildes en dos nombres; sin la plantilla de la cátedra (ver punto 6 y "para que lo mire alguien del grupo"). |
-| Índice general y correspondencia con títulos | ❌ | 33 entradas, jerarquía completa; 27 coinciden exactamente. Tres páginas mal: 3.3, 5.3 y 6 (punto 3). |
-| Índice de figuras / Índice de tablas | ❌ | Ambos presentes. Tablas 6-8 cruzadas (punto 2); Figura 6 con página equivocada (punto 4); leyendas truncadas de manera despareja (punto 7). |
-| Epígrafes debajo de figuras y tablas, correlativos con el índice | ✅ | Los 16 debajo del objeto, numerados y referenciados desde el texto. |
-| Bibliografía | ❌ | Presente y bien formada (7 entradas con fecha de consulta), pero la cita [7] del cuerpo apunta a la fuente equivocada (punto 5). |
+| Carátula | ⚠️ | Completa y con fecha. Faltan dos tildes; sin la plantilla de la cátedra. |
+| Índice general y correspondencia con títulos | ⚠️ | 30 entradas, textos coincidentes. Una página mal (punto 8); el título 4.6 perdió su número en el cuerpo (punto 4). |
+| Índice de figuras / Índice de tablas | ⚠️ | Las dieciséis páginas correctas. Una leyenda que no coincide (punto 9). |
+| Epígrafes debajo de figuras y tablas | ✅ | Los 16 debajo del objeto, numerados y referenciados desde el texto. |
+| Bibliografía | ✅ | Siete entradas completas, las siete citadas desde el texto, cita bien colocada. |
 | Anexo (opcional) | ℹ️ | No hay. No se penaliza. |
-| Números de página | ✅ | En todas las páginas salvo la carátula; la numeración impresa coincide con la del PDF. |
-| Lenguaje: sin 1ª persona ni voseo | ❌ | El cuerpo está impecable. El voseo aparece sólo dentro de la captura de la Figura 3 (punto 8). |
-| Registro adecuado por sección (siglas, anglicismos, ortografía) | ❌ | Siglas definidas y registro correcto en el cuerpo. Desprolijidades: «firmware» en cursiva 1 de 6 veces (punto 9); «broker», «protoboard», «pull-ups» y un coloquialismo dentro de las figuras (punto 8); dos tildes en la carátula (punto 6). |
-| Títulos y subtítulos identificados y jerarquizados | ⚠️ | Esquema numerado consistente, ningún título termina en punto ni dos puntos, sin títulos huérfanos. El nivel 3 (4.4.x) usa el mismo cuerpo de 12 pt (punto 12). |
-| Fuente Arial / Times New Roman / Libertinus 12 pt | ✅ | Times New Roman 12 pt en el 72 % de los caracteres. Consolas 8,5 pt sólo en los bloques de código, admitido. |
-| Interlineado 1,5 | ✅ | 20,7 pt sobre fuente de 12 pt = 1,72×, que es el 1,5 real. Las excepciones son índices y tablas, admitidas. |
-| Texto justificado | ✅ | 93 % de las líneas largas terminan en el margen derecho. |
-
-### Diagramación (punto menor)
-
-| Página | Ocupación | Causa |
-|---|---|---|
-| 9 | ~5 % | Cierre de la sección 2.3, tres líneas. |
-| 22 | ~55 % | La Figura 6 no entró y se fue entera a la p.23. |
-| 24 | ~25 % | Sección 5.3 Enlaces. |
+| Números de página | ✅ | En todas salvo la carátula; sin corrimiento respecto de los índices. |
+| Lenguaje: sin 1ª persona ni voseo | ⚠️ | El cuerpo, impecable. El voseo sobrevive dentro de la Figura 3. |
+| Registro adecuado por sección (siglas, anglicismos, ortografía) | ⚠️ | Cursivas y terminología resueltas salvo una aparición y «Link». Falta el texto de las Figuras 1 y 2. |
+| Coherencia interna del contenido | ❌ | Tabla 4 contra 2.2 (punto 1); cuatro secciones desactualizadas (punto 3); Tabla 9 con dependencia y plazo incoherentes. |
+| Títulos y subtítulos identificados y jerarquizados | ❌ | El «4.6» quedó en el párrafo anterior (punto 4). Nivel 3 al mismo cuerpo de 12 pt. |
+| Fuente Arial / Times New Roman / Libertinus 12 pt | ✅ | Times New Roman 12 pt en el 70,5 % de los caracteres. Consolas 8,5 pt sólo en código. |
+| Interlineado 1,5 | ✅ | 20,7 pt sobre 12 pt = 1,72×, que es el 1,5 real. |
+| Texto justificado | ✅ | 84 % de las líneas largas terminan en el margen derecho. |
