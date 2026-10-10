@@ -59,3 +59,11 @@ Definimos el hardware necesario para el proyecto y realizamos el pedido a la cat
 ### 01/10/2026
 
 Nos fue entregado el hardware y se realizó una demostracion presencial acerca del conexionado y las decisiones sobre el broker, que es quien toma las decisiones con respecto a los mensajes (no asi el pulsador).
+
+### 05/10/2026
+
+Se elaboro el informe de avance volcando todo lo realizado y adjuntado en la bitacora 
+
+### 08/10/2026
+
+Se mostro una demo de la aplicacion y simulacion en la clase presencial, se evaluaron distintos cambios en la base de datos y mejoras sobre el stack utilizado, tambien se acordo la elaboracion de un video que demuestre el funcionamiento de la app y la simulacion
