@@ -42,10 +42,10 @@ deciden nada.
 | Parte | Estado | Responsable |
 |---|---|---|
 | Aplicación web y simulador | Funcionando y probada | Valentín |
-| Contrato de mensajería | Cerrado, versión 1 | — |
-| **Firmware del pulsador** | **Sin empezar** | ← el que lo tome |
-| Raspberry Pi como punto de acceso | Investigado, sin implementar | — |
-| Armado físico | Sin empezar, esperando materiales | — |
+| Contrato de mensajería | Cerrado, versión 1 | Valentin/Mateo |
+| **Firmware del pulsador** | **Sin empezar** | Mateo |
+| Raspberry Pi como punto de acceso | Investigado, sin implementar | Joaquin |
+| Armado físico | Sin empezar, esperando materiales | Joaquin/Mateo/Valentin |
 
 ---
 
