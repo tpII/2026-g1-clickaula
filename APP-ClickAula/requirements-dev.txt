@@ -1,0 +1,4 @@
+# Sólo para correr los tests en la máquina de desarrollo.
+# La imagen de Docker usa requirements.txt y no necesita esto.
+-r requirements.txt
+pytest==9.1.1

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block titulo %}{{ 'Editar' if encuesta else 'Nueva' }} encuesta · ClickAula{% endblock %}
+{% block cuerpo %}
+<div class="contenido">
+  <div id="aviso" class="aviso error oculto"></div>
+
+  <div class="tarjeta">
+    <h2>{{ 'Editar encuesta' if encuesta else 'Nueva encuesta' }}</h2>
+    <div class="campos">
+      <div style="flex:2">
+        <label for="nombre">Nombre <span style="color:var(--mal)">*</span></label>
+        <input type="text" id="nombre" placeholder="Ej.: Repaso de sistemas operativos"
+               value="{{ encuesta.nombre if encuesta else '' }}" maxlength="120">
+      </div>
+      <div>
+        <label for="modalidad">Modalidad</label>
+        <select id="modalidad">
+          <option value="competencia" {{ 'selected' if not encuesta or encuesta.modalidad == 'competencia' }}>
+            Competencia por puntaje</option>
+          <option value="anonima" {{ 'selected' if encuesta and encuesta.modalidad == 'anonima' }}>
+            Encuesta anónima</option>
+        </select>
+      </div>
+      <div>
+        <label for="segundos">Segundos por pregunta</label>
+        <input type="number" id="segundos" min="5" max="300" value="{{ segundos }}">
+      </div>
+      <div id="campo-puntaje">
+        <label for="puntaje">Puntaje base</label>
+        <input type="number" id="puntaje" min="10" max="10000" step="10" value="{{ puntaje_base }}">
+      </div>
+    </div>
+    <p class="sutil" id="nota-anonima" style="margin-bottom:0">
+      En la encuesta anónima no hay respuestas correctas, ni puntaje, ni ganadores.</p>
+  </div>
+
+  <div class="tarjeta">
+    <h2>Preguntas</h2>
+    <div id="preguntas"></div>
+    <button id="agregar" class="primario">+ Agregar pregunta</button>
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:40px">
+    <a class="boton" href="{{ url_for('biblioteca') }}">Cancelar</a>
+    <button id="guardar" class="primario grande">
+      {{ 'Guardar cambios' if encuesta else 'Crear encuesta' }}</button>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  window.ENCUESTA_ID = {{ encuesta.id if encuesta else 'null' }};
+  window.PREGUNTAS_INICIALES = {{ (encuesta.preguntas if encuesta else []) | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+{% endblock %}

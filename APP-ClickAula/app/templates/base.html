@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}ClickAula{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body class="{% block clase_body %}{% endblock %}">
+{% block barra %}
+<div class="barra">
+  <h1>ClickAula</h1>
+  <a class="boton" href="{{ url_for('biblioteca') }}">Encuestas</a>
+  <a class="boton" href="{{ url_for('historial') }}">Historial</a>
+  <span class="espacio"></span>
+  <span id="estado-mqtt" class="chip">broker…</span>
+  <span id="estado-pulsadores" class="chip">— pulsadores</span>
+  <a class="boton" href="{{ url_for('proyeccion') }}" target="_blank" rel="noopener">
+    Abrir proyección ↗</a>
+</div>
+{% endblock %}
+{% block cuerpo %}{% endblock %}
+<script src="{{ url_for('static', filename='js/comun.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

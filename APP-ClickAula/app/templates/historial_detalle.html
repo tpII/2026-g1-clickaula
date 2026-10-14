@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block titulo %}{{ ej.nombre_encuesta }} · ClickAula{% endblock %}
+{% block cuerpo %}
+{% set puntuables = ej.preguntas | selectattr('correcta') | list %}
+{% set ns = namespace(facil=None, dificil=None) %}
+{% for p in puntuables %}
+  {% set pct = (p.correctas / p.respondieron * 100) if p.respondieron else 0 %}
+  {% if ns.facil is none or pct > ns.facil[1] %}{% set ns.facil = (p, pct) %}{% endif %}
+  {% if ns.dificil is none or pct < ns.dificil[1] %}{% set ns.dificil = (p, pct) %}{% endif %}
+{% endfor %}
+<div class="contenido">
+  <div class="tarjeta">
+    <div class="fila">
+      <div class="crece">
+        <h2 style="margin:0">{{ ej.nombre_encuesta }}</h2>
+        <div class="sutil">{{ ej.fecha.replace('T', ' ') }} ·
+          {{ 'Competencia' if ej.modalidad == 'competencia' else 'Encuesta anónima' }} ·
+          {{ ej.participantes }} participantes · {{ ej.preguntas|length }} preguntas</div>
+      </div>
+      <a class="boton" href="{{ url_for('historial_csv_preguntas', ej_id=ej.id) }}">
+        Descargar preguntas (CSV)</a>
+      {% if hay_podio %}
+      <a class="boton" href="{{ url_for('historial_csv_podio', ej_id=ej.id) }}">
+        Descargar podio (CSV)</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if ej.podio %}
+  <div class="tarjeta">
+    <h3>Podio</h3>
+    <div class="podio">
+      {% for p in ej.podio %}
+      <div class="puesto p{{ p.puesto }}" style="order:{{ 1 if p.puesto == 2 else (2 if p.puesto == 1 else 3) }}">
+        <div class="caja">
+          <div class="medalla">{{ '🥇' if p.puesto == 1 else ('🥈' if p.puesto == 2 else '🥉') }}</div>
+          <div class="quien">Pulsador {{ '%02d' % p.pulsador_numero }}</div>
+          <div class="pts">{{ p.puntaje }} pts</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if ns.facil %}
+  <div class="tarjeta">
+    <h3>Extremos</h3>
+    <div class="fila">
+      <div class="crece"><div class="titulo">Más fácil</div>
+        <div class="sutil">{{ ns.facil[0].orden }}. {{ ns.facil[0].enunciado }}</div></div>
+      <strong>{{ '%.0f' % ns.facil[1] }}% de aciertos</strong>
+    </div>
+    <div class="fila">
+      <div class="crece"><div class="titulo">Más difícil</div>
+        <div class="sutil">{{ ns.dificil[0].orden }}. {{ ns.dificil[0].enunciado }}</div></div>
+      <strong>{{ '%.0f' % ns.dificil[1] }}% de aciertos</strong>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="tarjeta">
+    <h3>Desglose por pregunta</h3>
+    {% for p in ej.preguntas %}
+    <div style="padding:14px 0;border-bottom:1px solid var(--borde)">
+      <div class="titulo" style="margin-bottom:4px">{{ p.orden }}. {{ p.enunciado }}</div>
+      <div class="sutil" style="margin-bottom:10px">
+        {{ p.respondieron }} de {{ p.esperados }} respondieron
+        {% if p.correcta %} · {{ p.correctas }} correctas
+          ({{ '%.0f' % (p.correctas / p.respondieron * 100) if p.respondieron else 0 }}%){% endif %}
+      </div>
+      <div class="barras">
+        {% for letra in OPCIONES[:p.opciones|length] %}
+        {% set cant = p.conteo.get(letra, 0) %}
+        <div class="barra-op {{ 'es-correcta' if p.correcta == letra }}">
+          <span class="marca marca-{{ letra|lower }}">{{ letra }}</span>
+          <span class="pista">
+            <span class="relleno relleno-{{ letra|lower }}"
+                  style="width: {{ (cant / p.respondieron * 100) if p.respondieron else 0 }}%"></span>
+            <span class="txt">{{ p.opciones[loop.index0] }}
+              {% if p.correcta == letra %}<strong>· correcta</strong>{% endif %}</span>
+          </span>
+          <span class="cant">{{ cant }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block titulo %}Encuestas · ClickAula{% endblock %}
+{% block cuerpo %}
+<div class="contenido">
+  <div class="tarjeta">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <h2 style="margin:0">Encuestas guardadas</h2>
+      <span class="espacio" style="flex:1"></span>
+      <a class="boton primario" href="{{ url_for('encuesta_nueva') }}">+ Nueva encuesta</a>
+    </div>
+    {% if encuestas %}
+      {% for e in encuestas %}
+      <div class="fila">
+        <div class="crece">
+          <div class="titulo">{{ e.nombre }}</div>
+          <div class="sutil">
+            {{ e.n_preguntas }} pregunta{{ '' if e.n_preguntas == 1 else 's' }} ·
+            {{ e.segundos }} s por pregunta
+            {% if e.modalidad == 'competencia' %} · {{ e.puntaje_base }} pts base{% endif %}
+          </div>
+        </div>
+        <span class="chip {{ e.modalidad }}">
+          {{ 'Competencia' if e.modalidad == 'competencia' else 'Anónima' }}</span>
+        <button class="primario" data-ejecutar="{{ e.id }}"
+                {% if e.n_preguntas == 0 %}disabled title="Sin preguntas"{% endif %}>Ejecutar</button>
+        <a class="boton" href="{{ url_for('encuesta_editar', enc_id=e.id) }}">Editar</a>
+        <button class="peligro" data-borrar="{{ e.id }}" data-nombre="{{ e.nombre }}">Borrar</button>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="vacio">Todavía no hay encuestas. Creá la primera con «Nueva encuesta».</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/biblioteca.js') }}"></script>
+{% endblock %}

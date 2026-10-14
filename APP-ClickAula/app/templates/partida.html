@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block titulo %}Partida · ClickAula{% endblock %}
+{% block cuerpo %}
+<div class="contenido ancho">
+
+  <div id="sin-partida" class="tarjeta oculto">
+    <div class="vacio">No hay ninguna partida en curso.
+      <br><a href="{{ url_for('biblioteca') }}">Volver a las encuestas</a></div>
+  </div>
+
+  <!-- ---------------------------------------------------- sala de espera -->
+  <div id="lobby" class="tarjeta oculto">
+    <h2 id="lobby-nombre">—</h2>
+    <div class="sutil" id="lobby-detalle" style="margin-bottom:14px"></div>
+    <h3>Pulsadores detectados (<span id="lobby-cant">0</span>)</h3>
+    <div class="grilla" id="lobby-grilla"></div>
+    <p class="sutil">Encendé los pulsadores: aparecen solos a medida que se conectan.</p>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button id="btn-comenzar" class="primario grande">Comenzar</button>
+      <button id="btn-abortar">Cancelar partida</button>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------ en pregunta -->
+  <div id="jugando" class="oculto">
+    <div class="tarjeta">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div>
+          <h3 style="margin:0">Pregunta <span id="p-orden">1</span> de <span id="p-total">1</span></h3>
+          <div class="titulo" id="p-enunciado" style="font-size:18px"></div>
+        </div>
+        <span style="flex:1"></span>
+        <div style="text-align:right">
+          <div class="sutil">Tiempo</div>
+          <div id="p-reloj" style="font-size:30px;font-weight:800;font-variant-numeric:tabular-nums">—</div>
+        </div>
+        <div style="text-align:right">
+          <div class="sutil">Votos</div>
+          <div id="p-votos" style="font-size:30px;font-weight:800;font-variant-numeric:tabular-nums">0/0</div>
+        </div>
+        <button id="btn-cerrar" class="primario grande">Cerrar ahora</button>
+      </div>
+      <div class="barras" id="p-opciones" style="margin-top:16px"></div>
+    </div>
+    <div class="tarjeta">
+      <h3>Quién ya votó</h3>
+      <div class="grilla" id="p-grilla"></div>
+    </div>
+  </div>
+
+  <!-- ----------------------------------------------- resultados pregunta -->
+  <div id="resultados" class="oculto">
+    <div class="tarjeta">
+      <h2>Resultado de la pregunta <span id="r-orden"></span></h2>
+      <div class="titulo" id="r-enunciado" style="margin-bottom:14px"></div>
+      <div class="barras" id="r-barras"></div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div class="tarjeta" style="flex:1;min-width:280px">
+        <h3>Más rápidos en acertar</h3>
+        <div id="r-top"></div>
+      </div>
+      <div class="tarjeta" style="flex:1;min-width:280px">
+        <h3>Tabla acumulada</h3>
+        <div id="r-leaderboard"></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:40px">
+      <button id="btn-siguiente" class="primario grande">Siguiente pregunta →</button>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------- resumen -->
+  <div id="resumen" class="oculto">
+    <div class="tarjeta"><h2 id="res-titulo">Resultados finales</h2>
+      <div class="sutil" id="res-sub"></div></div>
+    <div class="tarjeta oculto" id="res-podio-caja">
+      <h3>Podio</h3><div class="podio" id="res-podio"></div></div>
+    <div class="tarjeta oculto" id="res-extremos-caja"><h3>Extremos</h3>
+      <div id="res-extremos"></div></div>
+    <div class="tarjeta"><h3>Desglose por pregunta</h3><div id="res-desglose"></div></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:40px">
+      <button id="btn-descartar">Descartar</button>
+      <button id="btn-guardar" class="primario grande">Guardar en el historial</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/partida.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}ClickAula · Proyección{% endblock %}
+{% block clase_body %}proyeccion{% endblock %}
+{% block barra %}{% endblock %}
+{% block cuerpo %}
+<div class="pantalla">
+  <div class="encabezado">
+    <span id="px-encuesta">ClickAula</span>
+    <span class="espacio"></span>
+    <span id="px-progreso"></span>
+    <span class="contador" id="px-votos"></span>
+    <span class="reloj" id="px-reloj"></span>
+  </div>
+  <div class="centro">
+    <div id="px-espera">
+      <div class="enunciado">Conectando pulsadores…</div>
+      <div class="grilla" id="px-grilla-espera"></div>
+    </div>
+    <div id="px-pregunta" class="oculto">
+      <div class="enunciado" id="px-enunciado"></div>
+      <div class="opciones-proy" id="px-opciones"></div>
+    </div>
+    <div id="px-resultados" class="oculto">
+      <div class="enunciado" id="px-r-enunciado" style="font-size:2.6vw"></div>
+      <div class="barras" id="px-r-barras"></div>
+    </div>
+    <div id="px-leaderboard" class="oculto">
+      <div class="enunciado" style="font-size:3vw">Tabla de posiciones</div>
+      <table><thead><tr><th>#</th><th>Pulsador</th><th class="num">Puntos</th></tr></thead>
+        <tbody id="px-lb-cuerpo"></tbody></table>
+    </div>
+    <div id="px-final" class="oculto">
+      <div class="enunciado" style="font-size:3.4vw" id="px-final-titulo">¡Terminamos!</div>
+      <div class="podio" id="px-podio"></div>
+      <div id="px-extremos" style="text-align:center;font-size:2vh;color:#9aa3b6"></div>
+    </div>
+  </div>
+  <div class="grilla" id="px-grilla" style="margin-top:2vh"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/proyeccion.js') }}"></script>
+{% endblock %}

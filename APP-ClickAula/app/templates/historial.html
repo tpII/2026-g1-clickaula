@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titulo %}Historial · ClickAula{% endblock %}
+{% block cuerpo %}
+<div class="contenido">
+  <div class="tarjeta">
+    <h2>Encuestas ejecutadas</h2>
+    <p class="sutil" style="margin-top:-6px">
+      Se guardan sólo los datos estadísticos de cada ejecución: nunca los votos individuales.</p>
+    {% if ejecuciones %}
+      {% for ej in ejecuciones %}
+      <div class="fila">
+        <div class="crece">
+          <div class="titulo">{{ ej.nombre_encuesta }}</div>
+          <div class="sutil">{{ ej.fecha.replace('T', ' ') }} · {{ ej.participantes }} participantes</div>
+        </div>
+        <span class="chip {{ ej.modalidad }}">
+          {{ 'Competencia' if ej.modalidad == 'competencia' else 'Anónima' }}</span>
+        <a class="boton" href="{{ url_for('historial_csv_preguntas', ej_id=ej.id) }}"
+           title="Descargar los resultados de esta ejecución en CSV">CSV</a>
+        <a class="boton" href="{{ url_for('historial_detalle', ej_id=ej.id) }}">Ver resultados</a>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="vacio">Todavía no se ejecutó ninguna encuesta.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

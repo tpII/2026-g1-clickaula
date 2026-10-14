@@ -1,0 +1,44 @@
+services:
+  broker:
+    image: eclipse-mosquitto:2
+    container_name: clickaula-broker
+    ports:
+      - "1883:1883"          # publicado para que los pulsadores reales lleguen
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: clickaula-app
+    depends_on:
+      - broker
+    ports:
+      - "5000:5000"
+    environment:
+      MQTT_HOST: broker
+      MQTT_PORT: 1883
+      WEB_PORT: 5000
+      DB_PATH: /srv/data/clickaula.db
+      # Permite que el simulador vea la respuesta correcta para poder acertar.
+      # Sacar esta línea para usar el sistema en el aula.
+      CLICKAULA_DEV: "1"
+    volumes:
+      - ./data:/srv/data       # la base sobrevive a docker compose down
+    restart: unless-stopped
+
+  # Sólo arranca con:  docker compose --profile simulacion up
+  simulador:
+    build: .
+    container_name: clickaula-simulador
+    depends_on:
+      - app
+    profiles: ["simulacion"]
+    command: >
+      python sim/simulador.py --n 8 --broker broker
+      --app http://app:5000 --acierto 0.6
+    restart: unless-stopped
+
+volumes:
+  mosquitto-data:
