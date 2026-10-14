@@ -67,3 +67,24 @@ Se elaboro el informe de avance volcando todo lo realizado y adjuntado en la bit
 ### 08/10/2026
 
 Se mostro una demo de la aplicacion y simulacion en la clase presencial, se evaluaron distintos cambios en la base de datos y mejoras sobre el stack utilizado, tambien se acordo la elaboracion de un video que demuestre el funcionamiento de la app y la simulacion
+
+
+### 08/10/2026
+
+Después de hablar con el profesor sobre el desarrollo, investigamos cómo se estructuran habitualmente las aplicaciones de este tipo. Nos quedamos con el patrón de puertos y adaptadores, que se usa justamente cuando la parte valiosa y frágil del sistema —las reglas de juego y la máquina de estados— tiene que quedar aislada de todo lo que puede fallar: la red, el intermediario, el disco y el navegador. El objetivo concreto es que cuando lleguen los pulsadores reales, la aplicación ya esté probada por separado y los problemas que aparezcan sean de hardware y no nuestros.
+
+### 10/10/2026
+
+Escribimos el documento de reglas del proyecto, que fija el stack, las doce reglas que no se rompen y el estado de cada parte, de modo que cualquiera del equipo pueda tomar trabajo sin tener que reconstruir las conversaciones anteriores. En paralelo reprodujimos y corregimos un error que veníamos arrastrando: la aplicación descartaba votos como duplicados cuando un pulsador se reiniciaba. La causa es que el contador de secuencia del nodo vuelve a empezar en 1 al arrancar, y la aplicación lo interpretaba como el reenvío de un mensaje viejo, dejando a ese pulsador mudo por el resto de la sesión. Con hardware real se habría disparado ante cualquier reinicio por batería.
+
+### 12/10/2026
+
+Reestructuramos la aplicación separando el núcleo de reglas de la infraestructura. El cambio más importante no fue mover archivos sino sacar el reloj del núcleo: ahora el instante entra como parámetro en lugar de consultarse, y eso permite probar una partida de cinco preguntas de treinta segundos en milisegundos en vez de esperarla en tiempo real. Quedó una batería de sesenta y dos pruebas automatizadas que corre en menos de un segundo, incluida una que revisa los imports del núcleo y falla si alguien mete infraestructura ahí, para que la regla no dependa de que el equipo se acuerde.
+
+### 13/10/2026
+
+Revisamos el alcance de lo que faltaba de la aplicación y descartamos dos cosas que estaban planificadas. El sistema de migraciones de base de datos quedaba sin uso al no haber ningún cambio de esquema pendiente, y la recuperación de la partida ante una caída de la aplicación cuesta más mantener que volver a largar la ronda, que es lo que haría el coordinador igual. Dejamos documentados como decisiones los riesgos de red que decidimos no cerrar —la aplicación escucha en toda la red del aula y el intermediario no pide credenciales—, junto con el motivo y cómo se cerrarían, para no confundir más adelante una decisión tomada con un olvido.
+
+### 14/10/2026
+
+Implementamos la exportación de resultados a CSV, que era lo último que faltaba de la aplicación y estaba comprometido en el Plan de Proyecto. Se descarga desde el historial, una fila por pregunta con los votos de cada opción y el porcentaje de acierto, y por separado el podio en las ejecuciones competitivas. El formato está pensado para abrirse directo en una planilla en español, con punto y coma como separador y marca de codificación, porque de otro modo el archivo se abre apilado en una sola columna y con los acentos mal. Como el histórico guarda únicamente datos agregados, el archivo no puede contener el voto individual de nadie.
