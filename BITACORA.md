@@ -88,3 +88,11 @@ Revisamos el alcance de lo que faltaba de la aplicación y descartamos dos cosas
 ### 14/10/2026
 
 Implementamos la exportación de resultados a CSV, que era lo último que faltaba de la aplicación y estaba comprometido en el Plan de Proyecto. Se descarga desde el historial, una fila por pregunta con los votos de cada opción y el porcentaje de acierto, y por separado el podio en las ejecuciones competitivas. El formato está pensado para abrirse directo en una planilla en español, con punto y coma como separador y marca de codificación, porque de otro modo el archivo se abre apilado en una sola columna y con los acentos mal. Como el histórico guarda únicamente datos agregados, el archivo no puede contener el voto individual de nadie.
+
+### 17/10/2026
+
+Investigamos las bibliotecas de MQTT disponibles para el ESP8266, para cerrar la decisión que teníamos pendiente del contrato de mensajería. PubSubClient, que es la más difundida y la que aparece primero en cualquier tutorial, solo puede publicar en calidad de servicio 0: soporta QoS 1 para suscribirse pero no para publicar, decidimos usar arduino-mqtt de Joel Gaehwiler, que sí espera la confirmación de entrega del intermediario. Queda definida también la plataforma de desarrollo: NodeMCU 1.0 sobre el núcleo ESP8266 para Arduino.
+
+### 20/10/2026
+
+Investigamos cómo montar la Raspberry Pi como punto de acceso del aula y definimos el camino a seguir: hostapd para publicar la red inalámbrica y dnsmasq únicamente como servidor DHCP, sin DNS ni puerta de enlace, porque la red no tiene salida a internet y el intermediario se alcanza por una dirección IP fija. Encontramos que la versión del sistema operativo no es indistinta: desde Bookworm la gestión de red pasó a NetworkManager y ya no se lee dhcpcd.conf, que es lo que indica la mayoría de las guías, así que hay que desacoplar explícitamente la interfaz inalámbrica de NetworkManager para que hostapd pueda tomarla. Decidimos además fijar concesiones de dirección cortas, porque los pulsadores entran y salen de la red permanentemente y con los plazos por omisión la tabla se llenaría de entradas de equipos que ya no están.
