@@ -384,8 +384,8 @@ La aplicación no publica nada dirigido al pulsador (R9).
 |---|---|---|---|
 | A | Rojo | D1 | GPIO5 |
 | B | Azul | D2 | GPIO4 |
-| C | Amarillo | D5 | GPIO14 |
-| D | Verde | D6 | GPIO12 |
+| C | Amarillo | D6 | GPIO12 |
+| D | Verde | D7 | GPIO13 |
 
 Cada botón: una pata al pin, la otra a masa. Las cuatro masas van a un riel
 común. Ver `Conexionado_Pulsador.png`.
@@ -445,7 +445,7 @@ qué hacer con los votos emitidos mientras no hay conexión.
 const char*   SSID      = "ClickAula";
 const char*   PASS      = "...";
 const char*   BROKER    = "192.168.4.1";       // IP fija de la Raspberry Pi
-const uint8_t PINES[4]  = {5, 4, 14, 12};      // D1 D2 D5 D6
+const uint8_t PINES[4]  = {5, 4, 12, 13};      // D1 D2 D6 D7
 const char*   OPCION[4] = {"A", "B", "C", "D"};
 
 char id[7], topicVoto[32], topicPresencia[32];

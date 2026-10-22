@@ -1,0 +1,17 @@
+[Unit]
+Description=ClickAula: IP fija de la Pi en la red del aula
+# NetworkManager no administra wlan0 (networkmanager.conf), así que nadie más
+# le pone dirección. Es la IP a la que apuntan el firmware y la aplicación.
+BindsTo=sys-subsystem-net-devices-wlan0.device
+After=sys-subsystem-net-devices-wlan0.device
+Before=hostapd.service dnsmasq.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=-rfkill unblock wlan
+ExecStart=ip link set wlan0 up
+ExecStart=ip addr replace 192.168.4.1/24 dev wlan0
+
+[Install]
+WantedBy=multi-user.target

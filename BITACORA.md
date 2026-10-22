@@ -96,3 +96,17 @@ Investigamos las bibliotecas de MQTT disponibles para el ESP8266, para cerrar la
 ### 20/10/2026
 
 Investigamos cómo montar la Raspberry Pi como punto de acceso del aula y definimos el camino a seguir: hostapd para publicar la red inalámbrica y dnsmasq únicamente como servidor DHCP, sin DNS ni puerta de enlace, porque la red no tiene salida a internet y el intermediario se alcanza por una dirección IP fija. Encontramos que la versión del sistema operativo no es indistinta: desde Bookworm la gestión de red pasó a NetworkManager y ya no se lee dhcpcd.conf, que es lo que indica la mayoría de las guías, así que hay que desacoplar explícitamente la interfaz inalámbrica de NetworkManager para que hostapd pueda tomarla. Decidimos además fijar concesiones de dirección cortas, porque los pulsadores entran y salen de la red permanentemente y con los plazos por omisión la tabla se llenaría de entradas de equipos que ya no están.
+
+### 21/10/2026
+
+Cerramos la investigación de la Raspberry Pi y escribimos su configuración completa. La Pi cumple dos funciones: publica la red del aula y corre el intermediario Mosquitto; la aplicación sigue corriendo en la computadora del coordinador. Un único script de instalación copia los archivos de hostapd, dnsmasq, Mosquitto y NetworkManager, agrega la clave de la red en el momento (así no queda en el repositorio) y habilita los servicios, que recién toman efecto al reiniciar para no cortar la sesión remota a mitad de la instalación. Un servicio propio fija la dirección 192.168.4.1 en la interfaz inalámbrica antes de que arranquen hostapd y dnsmasq, con lo que queda resuelto el orden de arranque anotado el 15/09. Para la Zero W usamos Raspberry Pi OS Lite de 32 bits sobre Bookworm, porque no corre 64 bits y la versión siguiente maneja la red con otras herramientas contra las que el script no está probado; el script se niega a correr en otra versión.
+
+### 22/10/2026
+
+Escribimos el firmware del pulsador según el contrato de mensajería. Es publicador puro: lee los cuatro botones, publica el voto con QoS 1 y un número de secuencia, y manda un latido de presencia cada cinco segundos, con mensaje de última voluntad para que el intermediario avise si el nodo se cae. Los botones usan las resistencias internas del ESP8266 y un antirrebote de 50 ms por nivel sostenido, y van en D1, D2, D6 y D7, evitando los pines que el módulo consulta al arrancar. Un voto que no se pudo entregar se reintenta durante un segundo y medio y después se descarta: como el voto no lleva el número de pregunta, entregarlo tarde podría hacerlo caer en la pregunta siguiente. La clave del WiFi vive en un archivo aparte que no se versiona, igual que las credenciales de la Pi.
+
+### 22/10/2026
+
+El firmware compiló sin errores y se cargó en los NodeMCU, y la Raspberry Pi quedó instalada con el script. La Pi levanta la red del aula, los pulsadores se asocian, y con `mosquitto_sub -t 'aula/#' -v` se ven llegar al intermediario los latidos de presencia y los votos de cada botón con su opción y su número de secuencia.
+
+

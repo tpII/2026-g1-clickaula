@@ -1,0 +1,27 @@
+# Uso en el aula: el broker corre en la Raspberry Pi Zero W, acá sólo la app.
+# El PC tiene que estar conectado a la red WiFi de la Pi.
+#
+# En el aula no hay internet y el build necesita bajar la imagen de Python y
+# los paquetes, así que se construye antes, en una red con salida:
+#
+#   docker compose -f docker-compose.aula.yml build      # en casa
+#   docker compose -f docker-compose.aula.yml up -d      # en el aula, sin --build
+#
+# Comparte proyecto y contenedor con docker-compose.yml: bajar antes la
+# simulación con  docker compose --profile simulacion down
+
+services:
+  app:
+    build: .
+    container_name: clickaula-app
+    ports:
+      - "5000:5000"
+    environment:
+      MQTT_HOST: 192.168.4.1
+      MQTT_PORT: 1883
+      WEB_PORT: 5000
+      DB_PATH: /srv/data/clickaula.db
+      # Sin CLICKAULA_DEV a propósito: en el aula revelaría la respuesta (R10).
+    volumes:
+      - ./data:/srv/data       # la misma base que en desarrollo
+    restart: unless-stopped
