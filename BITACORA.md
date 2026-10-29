@@ -109,4 +109,6 @@ Escribimos el firmware del pulsador según el contrato de mensajería. Es public
 
 El firmware compiló sin errores y se cargó en los NodeMCU, y la Raspberry Pi quedó instalada con el script. La Pi levanta la red del aula, los pulsadores se asocian, y con `mosquitto_sub -t 'aula/#' -v` se ven llegar al intermediario los latidos de presencia y los votos de cada botón con su opción y su número de secuencia.
 
+### 25/10/2026
+Se testeo la sesión del broker, la comunicación con la app y la conexión de los pulsadores, no hubieron inconvenientes. Se levantó la sesión del broker y se probaron todos los casos de uso de los pulsadores, todos resultaron como se planificó.
 
