@@ -112,3 +112,7 @@ El firmware compiló sin errores y se cargó en los NodeMCU, y la Raspberry Pi q
 ### 25/10/2026
 Se testeo la sesión del broker, la comunicación con la app y la conexión de los pulsadores, no hubieron inconvenientes. Se levantó la sesión del broker y se probaron todos los casos de uso de los pulsadores, todos resultaron como se planificó.
 
+### 30/10/2026
+
+Diseñamos en Fusion 360 la caja que aloja al pulsador, en dos piezas impresas en 3D: una base donde va montado el NodeMCU y una tapa que la cierra en la que van montados los 4 botones. Al probar la primera impresión con la placa adentro encontramos que el conector microUSB no entraba, lo que impedía alimentar el pulsador con la caja armada. Corregimos el diseño y generamos una segunda versión de la base (`Caja_Base_v2.stl`) con el espacio necesario para el conector; la tapa no requirió cambios. El modelo editable y los STL de ambas versiones quedaron en la carpeta `Disenio Caja Pulsadores y RBPi/` del repositorio.
+
