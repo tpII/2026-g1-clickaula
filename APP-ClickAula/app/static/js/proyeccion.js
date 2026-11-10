@@ -77,7 +77,7 @@ function pintar(s) {
   if (s.estado === "RESUMEN") {
     mostrar("px-final", true);
     const r = s.resumen;
-    $("px-final-titulo").textContent = s.competitivo ? "¡Terminamos!" : "Gracias por participar";
+    $("px-final-titulo").textContent = s.competitivo ? "Resultados finales" : "Gracias por participar";
     $("px-podio").innerHTML = s.competitivo ? podioHTML(r.podio) : "";
     const busca = (o) => r.preguntas.find((p) => p.orden === o);
     const pct = (p) => (p.respondieron ? Math.round(p.correctas / p.respondieron * 100) : 0);

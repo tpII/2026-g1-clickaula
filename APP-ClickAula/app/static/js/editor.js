@@ -17,7 +17,7 @@ function pintar() {
     <div class="pregunta-edit" data-i="${i}">
       <div class="cabecera">
         <span class="n">${i + 1}.</span>
-        <input type="text" data-campo="enunciado" placeholder="Escribí la pregunta"
+        <input type="text" data-campo="enunciado" placeholder="Enunciado de la pregunta"
                value="${esc(p.enunciado)}" maxlength="300">
         <button data-accion="subir" ${i === 0 ? "disabled" : ""} title="Subir">↑</button>
         <button data-accion="bajar" ${i === preguntas.length - 1 ? "disabled" : ""} title="Bajar">↓</button>
@@ -28,7 +28,7 @@ function pintar() {
         <div class="opcion-edit">
           <span class="marca marca-${LETRAS[j].toLowerCase()}">${LETRAS[j]}</span>
           <input type="text" data-campo="opcion" data-j="${j}" maxlength="160"
-                 placeholder="${j < 2 ? "Opción obligatoria" : "Opción (podés dejarla vacía)"}"
+                 placeholder="${j < 2 ? "Opción obligatoria" : "Opción (puede dejarse vacía)"}"
                  value="${esc(o)}">
           <label class="correcta ${esAnonima() ? "oculto" : ""}">
             <input type="radio" name="correcta-${i}" data-campo="correcta" data-j="${j}"

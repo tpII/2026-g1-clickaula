@@ -116,3 +116,14 @@ Se testeo la sesión del broker, la comunicación con la app y la conexión de l
 
 Diseñamos en Fusion 360 la caja que aloja al pulsador, en dos piezas impresas en 3D: una base donde va montado el NodeMCU y una tapa que la cierra en la que van montados los 4 botones. Al probar la primera impresión con la placa adentro encontramos que el conector microUSB no entraba, lo que impedía alimentar el pulsador con la caja armada. Corregimos el diseño y generamos una segunda versión de la base (`Caja_Base_v2.stl`) con el espacio necesario para el conector; la tapa no requirió cambios. El modelo editable y los STL de ambas versiones quedaron en la carpeta `Disenio Caja Pulsadores y RBPi/` del repositorio.
 
+### 05/11/2026
+
+Mostramos los avances del proyecto ante la cátedra, con el pulsador físico, la Raspberry Pi generando la red del aula y la aplicación corriendo en la computadora del coordinador. Fue la primera demostración de extremo a extremo sobre equipamiento real: hasta ahora todo lo que se había mostrado corría sobre el entorno de simulación.
+
+### 07/11/2026
+
+Terminamos el Informe de Avance II, trabajando el viernes y el sábado. Además de volcar lo hecho en el período, aplicamos las correcciones de la devolución del informe anterior: quedó documentada la decisión de calidad de servicio 1 y la eliminación del requerimiento RT-2, se reformularon RF-4, RNF-2 y RNF-5 para que el informe diga lo que el sistema efectivamente hace, y se rehicieron las tablas de materiales y de consumo sobre la Raspberry Pi Zero W, que es la placa que realmente estamos usando. También regeneramos las figuras del esquema general y del conexionado, que seguían mostrando datos viejos.
+
+### 10/11/2026
+
+Empezamos la construcción de la caja del segundo pulsador. Se imprime directamente la segunda versión de la base, la que corrige la falta de espacio para el conector micro-USB que habíamos detectado al armar el primero, de modo que no hay que repetir esa prueba.
