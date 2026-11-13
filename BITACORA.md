@@ -127,3 +127,7 @@ Terminamos el Informe de Avance II, trabajando el viernes y el sábado. Además 
 ### 10/11/2026
 
 Empezamos la construcción de la caja del segundo pulsador. Se imprime directamente la segunda versión de la base, la que corrige la falta de espacio para el conector micro-USB que habíamos detectado al armar el primero, de modo que no hay que repetir esa prueba.
+
+### 13/11/2026
+
+Hablando con el profesor surgió la duda de cómo se garantiza que, si llegan muchos votos separados por milisegundos, la aplicación los procese en el orden en que llegaron, y si hacía falta montar una cola FIFO en la Raspberry. Revisamos el recorrido completo del mensaje y concluimos que no hace falta agregar nada: ya existe una cadena de colas sin paralelismo en ningún punto, formada por la cola de salida de la suscripción en Mosquitto, la única conexión TCP hacia la computadora del coordinador, el hilo de red del cliente MQTT que entrega los mensajes de a uno, y el candado del servicio, que asigna la marca de tiempo recién adentro. Un voto toma su lugar al entrar al broker y lo conserva hasta que se procesa; los que van llegando se agregan al final. Quedó explícito también el límite de esa garantía: el orden asegurado es el de llegada al broker y no el de pulsación, porque en el medio interviene la contienda del medio inalámbrico, y como ya se decidió con el profesor que el pulsador no va a llevar marca de tiempo, esa diferencia no es observable. Esta justificación se incorpora al informe final, separando lo que se demuestra por diseño de lo que queda como limitación asumida.
