@@ -131,3 +131,15 @@ Empezamos la construcción de la caja del segundo pulsador. Se imprime directame
 ### 13/11/2026
 
 Hablando con el profesor surgió la duda de cómo se garantiza que, si llegan muchos votos separados por milisegundos, la aplicación los procese en el orden en que llegaron, y si hacía falta montar una cola FIFO en la Raspberry. Revisamos el recorrido completo del mensaje y concluimos que no hace falta agregar nada: ya existe una cadena de colas sin paralelismo en ningún punto, formada por la cola de salida de la suscripción en Mosquitto, la única conexión TCP hacia la computadora del coordinador, el hilo de red del cliente MQTT que entrega los mensajes de a uno, y el candado del servicio, que asigna la marca de tiempo recién adentro. Un voto toma su lugar al entrar al broker y lo conserva hasta que se procesa; los que van llegando se agregan al final. Quedó explícito también el límite de esa garantía: el orden asegurado es el de llegada al broker y no el de pulsación, porque en el medio interviene la contienda del medio inalámbrico, y como ya se decidió con el profesor que el pulsador no va a llevar marca de tiempo, esa diferencia no es observable. Esta justificación se incorpora al informe final, separando lo que se demuestra por diseño de lo que queda como limitación asumida.
+
+### 15/11/2026
+Se organizó en Google Drive el material audiovisual del proyecto en dos carpetas separadas, «Videos armado pulsador» y «Videos testeos pulsador», dejando los enlaces listos para referenciar desde el informe final.
+
+### 19/11/2026 
+Se completó el armado del pulsador: se soldaron los botones momentáneos a su cableado, se montaron sobre la caja y se conectaron al módulo NodeMCU ESP8266.
+
+### 22/11/2026 
+Se probó el funcionamiento de los dos pulsadores en una sesión completa de juego, verificando la detección de ambos dispositivos al iniciar la partida, el registro de los votos emitidos por cada uno y el avance de las preguntas hasta la pantalla de resultados.
+
+### 24/11/2026
+Se comenzo con las pruebas finales y la redaccion de un borrador de la entrega final 
