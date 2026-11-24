@@ -30,6 +30,20 @@ FUERA_DE_VENTANA = "fuera_de_ventana"
 OPCION_INVALIDA = "opcion_invalida"
 YA_VOTO = "ya_voto"
 
+# --- deduplicación de reenvíos -------------------------------------------
+# Ventana dentro de la cual dos votos con el mismo (pulsador, secuencia) se
+# consideran el mismo mensaje reenviado por QoS 1.
+#
+# Cota superior del reenvío: el firmware reintenta un voto no confirmado
+# durante VIDA_VOTO_MS = 1.500 ms y después lo descarta, así que un reenvío
+# no puede llegar más tarde que eso más la demora de la red.
+#
+# Cota inferior del reinicio: la otra causa de una secuencia repetida es un
+# pulsador que arrancó de nuevo y volvió a numerar desde 1, lo que exige
+# arranque del módulo, asociación a la red, conexión al intermediario y una
+# pulsación humana: varios segundos. Entre las dos cotas hay margen de sobra.
+VENTANA_REENVIO_S = 2.0
+
 
 @dataclass(frozen=True)
 class Pregunta:

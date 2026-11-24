@@ -7,7 +7,7 @@ agente de IA que tome el trabajo.
 Si vas a escribir el **firmware del pulsador**, leé las secciones 1, 6, 7 y 8.
 Ahí está todo lo que necesitás y no te hace falta entender la aplicación.
 
-*Última actualización: 10 de octubre de 2026.*
+*Última actualización: 24 de noviembre de 2026.*
 
 ---
 
@@ -19,7 +19,7 @@ Informática, UNLP. **Entrega final: diciembre de 2026.**
 
 ```
 ┌─────────────┐          ┌──────────────────┐          ┌─────────────────┐
-│  Pulsador   │  WiFi    │  Raspberry Pi 3  │  WiFi    │  PC coordinador │
+│  Pulsador   │  WiFi    │  Pi Zero W       │  WiFi    │  PC coordinador │
 │  NodeMCU    │ ───────► │  hostapd+dnsmasq │ ───────► │  app Python     │
 │  4 botones  │   MQTT   │  Mosquitto       │   MQTT   │  SQLite + web   │
 └─────────────┘          └──────────────────┘          └─────────────────┘
@@ -42,10 +42,10 @@ deciden nada.
 | Parte | Estado | Responsable |
 |---|---|---|
 | Aplicación web y simulador | Funcionando y probada | Valentín |
-| Contrato de mensajería | Cerrado, versión 1 | Valentin/Mateo |
-| **Firmware del pulsador** | **Sin empezar** | Mateo |
-| Raspberry Pi como punto de acceso | Investigado, sin implementar | Joaquin |
-| Armado físico | Sin empezar, esperando materiales | Joaquin/Mateo/Valentin |
+| Contrato de mensajería | Cerrado, versión 1 | Valentín/Mateo |
+| Firmware del pulsador | Escrito, compilado y cargado en los dos módulos | Mateo |
+| Raspberry Pi como punto de acceso | Instalada y en funcionamiento | Joaquín |
+| Armado físico | Los dos pulsadores armados en su caja | Joaquín/Mateo/Valentín |
 
 ---
 
@@ -206,7 +206,7 @@ app/                     adaptadores (irán a adaptadores/ en la fase 3)
 ├── templates/           7 plantillas
 └── static/              CSS y 5 archivos de JavaScript
 
-tests/                   62 tests, corren en menos de un segundo
+tests/                   78 tests, corren en menos de un segundo
 sim/simulador.py         pulsadores simulados
 sim/sembrar.py           encuestas de ejemplo
 ```
@@ -219,7 +219,7 @@ sección 6 no cambia con la reestructuración.
 
 La pieza que hace posible todo lo demás es que **el dominio no consulta el
 reloj**: el instante entra como parámetro. Por eso una partida de cinco
-preguntas de treinta segundos se prueba en milisegundos, y por eso hay 62
+preguntas de treinta segundos se prueba en milisegundos, y por eso hay 78
 tests y no tres.
 
 ### Plan de migración
@@ -233,7 +233,7 @@ Cada fase deja la aplicación funcionando. Nunca hay un estado roto.
 | 2 | Puertos y repositorios | **Hecha** |
 | — | Migraciones versionadas | **Descartada**, ver abajo |
 | — | Exportación de resultados a CSV | **Hecha** |
-| 5 | Integración con los pulsadores reales | Esperando materiales |
+| 5 | Integración con los pulsadores reales | **Hecha** |
 | 3 | Flask como paquete con fábrica y blueprints | Si queda tiempo |
 | 6 | Empaquetado de escritorio | Si queda tiempo |
 | — | Robustez: supervisión y recuperación tras caída | **Descartada**, ver abajo |
@@ -303,22 +303,18 @@ deja escrito.
 **Versión 1.** La copia canónica está en `contrato.md`; esto es el resumen
 operativo.
 
-### ⚠ Antes de escribir una línea de firmware
+### La decisión de QoS, cerrada el 17 de octubre
 
-Hay **una decisión abierta** que el grupo tiene que cerrar, porque cambia la
-biblioteca que vas a usar:
+El contrato especifica **QoS 1** para los votos. **PubSubClient, la biblioteca
+más usada para ESP8266, solo puede publicar en QoS 0** — lo soporta para
+suscribirse, no para publicar, y no avisa: `publish()` ni siquiera acepta un
+parámetro de QoS.
 
-El contrato especifica **QoS 1** para los votos. Pero **PubSubClient, la
-biblioteca más usada para ESP8266, solo puede publicar en QoS 0** — lo soporta
-para suscribirse, no para publicar, y no avisa: `publish()` ni siquiera acepta
-un parámetro de QoS. Las dos salidas son:
-
-- **Mantener QoS 1** y usar `arduino-mqtt` (de 256dpi, aparece como "MQTT" en
-  el gestor de bibliotecas). Es lo recomendado: un voto perdido es la peor
-  falla posible, porque el alumno apretó, no pasó nada y sin LED nadie se
-  entera.
-- **Aceptar QoS 0** con PubSubClient, actualizar este contrato y avisar. Más
-  simple, y de paso hace desaparecer el bug de deduplicación de la sección 10.
+El grupo resolvió **mantener QoS 1** y usar `arduino-mqtt` (de 256dpi, aparece
+como "MQTT" en el gestor de bibliotecas), que espera la confirmación del
+intermediario. El fundamento: un voto perdido es la peor falla posible, porque
+el alumno apretó, no pasó nada y sin LED nadie se entera. El firmware vigente
+en `firmware/pulsador/pulsador.ino` está escrito sobre esa biblioteca.
 
 ### Identidad del pulsador
 
@@ -411,11 +407,16 @@ botones y ocho cables.
 ### Alimentación
 
 Batería portátil de 5 V → cable micro-USB → NodeMCU. Nada más. No hay
-regulador externo: al eliminarse el LED el pulsador quedó sin cargas externas,
-y el único consumidor es el propio módulo, alimentado como previó el
-fabricante de la placa.
+regulador externo, y el motivo no es que el pulsador se haya quedado sin
+cargas: la placa NodeMCU **ya trae su propio regulador de 5 V a 3,3 V**,
+dimensionado por el fabricante para el consumo del módulo, y alimentarla por
+su conector micro-USB desde una batería de 5 V es la configuración prevista
+para esa placa. Un segundo regulador externo sería redundante.
 
-Consumo: 5 V, unos 80 mA medios y 200 mA de pico al transmitir.
+Consumo: 5 V, unos 80 mA medios y 200 mA de pico al transmitir, según la hoja
+de datos del ESP8266. **No está medido sobre el equipamiento propio**, y el
+firmware desactiva el ahorro de energía de la radio (`WIFI_NONE_SLEEP`) para
+no demorar el PUBACK, lo que empuja el consumo por encima de ese valor.
 
 ### Red
 
@@ -570,7 +571,7 @@ Tres niveles, del más rápido al más lento. Empezá siempre por el primero.
 
 ```bash
 pip install -r requirements-dev.txt    # una sola vez: agrega pytest
-python3 -m pytest       # 62 tests del dominio y del servicio, menos de 1 s
+python3 -m pytest       # 78 tests del dominio y del servicio, menos de 1 s
 bash prueba_e2e.sh      # partida completa en las dos modalidades, con broker
 bash prueba_bordes.sh   # cierre por tiempo, doble voto, duplicados, caídas
 ```
@@ -606,16 +607,32 @@ agregás una clave al snapshot, agregala ahí y tocá el `.js` que la consume.
 pares `(pulsador, seq)` procesados para descartar reenvíos, pero `seq` vuelve a
 empezar en 1 cuando el nodo se reinicia y la aplicación lo tomaba por reenvío:
 descartaba en silencio todos los votos de ese pulsador por el resto de la
-sesión. Ahora la lista se vacía al abrir cada pregunta
-(`dominio/partida.py`, `_abrir`), y además vive en la partida y no en el
-servicio, así que empezar otra encuesta también la deja limpia. Queda
-custodiado por dos tests de regresión que no se tocan:
-`test_un_pulsador_que_reinicia_vuelve_a_votar` y
-`test_un_pulsador_que_reinicia_sigue_votando_en_la_partida_siguiente`.
-El `docker compose restart app` ya no hace falta.
+sesión. Se corrigió vaciando la lista al abrir cada pregunta, y además
+llevándola a la partida en lugar del servicio, así que empezar otra encuesta
+también la deja limpia. El `docker compose restart app` ya no hace falta.
 
-De la aplicación no queda ninguno abierto. Lo que falta del proyecto es el
-firmware, la Raspberry Pi como punto de acceso y el armado físico.
+**Reenvío que cruza a la pregunta siguiente — cerrado el 24 de noviembre.** Lo
+señaló la devolución del Informe de Avance 2: vaciar la lista al abrir cada
+pregunta dejaba abierto el caso inverso. En la modalidad anónima la pregunta
+siguiente abre apenas se cierra la anterior, de modo que un voto emitido al
+filo del cierre y confirmado recién en el reenvío de QoS 1 llegaba con la
+pregunta nueva abierta y se contabilizaba en ella. Ahora la lista guarda el
+**instante** de cada clave `(pulsador, seq)` y sobrevive al cambio de pregunta:
+dentro de `VENTANA_REENVIO_S` (2 s, `dominio/modelo.py`) la repetición es un
+reenvío y se descarta; pasada la ventana sólo puede ser un pulsador que se
+reinició, y el voto se acepta. Las dos cotas no se tocan: 1.500 ms es lo que el
+firmware reintenta un voto sin confirmar, y un reinicio con asociación a la red
+y pulsación humana tarda bastante más de 2 s.
+
+Cuatro tests de regresión custodian el conjunto y no se tocan:
+`test_un_pulsador_que_reinicia_su_contador_vuelve_a_votar`,
+`test_un_pulsador_que_reinicia_sigue_votando_en_la_partida_siguiente`,
+`test_un_reenvio_tardio_no_cae_en_la_pregunta_siguiente` y
+`test_pasada_la_ventana_la_misma_secuencia_es_un_reinicio_y_se_acepta`.
+
+De la aplicación no queda ninguno abierto. Lo que falta del proyecto son las
+mediciones sobre el equipamiento real: la diferencia de llegada entre los dos
+pulsadores y la prueba de carga contra el intermediario de la Raspberry Pi.
 
 ### Riesgos evaluados y aceptados
 
@@ -644,11 +661,13 @@ barato ponerlos desde el principio.
 
 **La partida en curso no sobrevive a un reinicio de la aplicación** (sección 5).
 
-**Raspberry Pi como punto de acceso.** Investigado, sin implementar. Hay
+**Límite de dispositivos asociados a la Raspberry Pi.** La Pi quedó instalada
+y en funcionamiento desde el 22 de octubre (ver `raspberry/LEEME.md`), pero hay
 reportes de bloqueo del controlador inalámbrico cerca de los 20 dispositivos
-asociados; Raspberry Pi OS Bookworm pasó a NetworkManager y ya no lee
-`dhcpcd.conf`; conviene usar concesiones de dirección cortas; y falta medir
-los canales 1, 6 y 11 antes de fijar el de la red.
+asociados. Es una limitación del controlador, no de la configuración, y
+condiciona a RNF-2: cerrarla exigiría un adaptador de red externo, que no
+integra el equipamiento disponible. Queda pendiente medir los canales 1, 6 y 11
+antes de fijar el de la red.
 
 ---
 

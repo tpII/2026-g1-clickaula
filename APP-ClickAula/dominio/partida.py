@@ -11,8 +11,8 @@ import collections
 
 from . import puntaje
 from .modelo import (DUPLICADO, FUERA_DE_VENTANA, LOBBY, OPCION_INVALIDA,
-                     PREGUNTA_ABIERTA, RESULTADOS, RESUMEN, YA_VOTO,
-                     ResultadoPregunta, Voto)
+                     PREGUNTA_ABIERTA, RESULTADOS, RESUMEN, VENTANA_REENVIO_S,
+                     YA_VOTO, ResultadoPregunta, Voto)
 
 
 class Partida:
@@ -28,11 +28,14 @@ class Partida:
         self.puntajes = collections.defaultdict(int)
         self.resultados = []            # [ResultadoPregunta]
         self.ultimos_aciertos = []      # [Acierto] de la última pregunta
-        # Claves (pulsador, seq) ya procesadas, para descartar los reenvíos de
-        # QoS 1. Se vacía al abrir cada pregunta: un pulsador que se reinicia
-        # vuelve a numerar desde 1 y, si la lista durara toda la sesión, sus
-        # votos quedarían descartados como duplicados para siempre.
-        self._seq_vistos = collections.deque(maxlen=200)
+        # Instante en que se procesó cada clave (pulsador, seq), para
+        # descartar los reenvíos de QoS 1. La comparación es por tiempo y no
+        # por presencia: dentro de VENTANA_REENVIO_S la repetición de una
+        # secuencia es un reenvío, y pasada la ventana sólo puede ser un
+        # pulsador que se reinició y volvió a numerar desde 1, cuyos votos
+        # tienen que aceptarse. Las claves sobreviven al cambio de pregunta,
+        # que es lo que permite atrapar el reenvío que cruza a la siguiente.
+        self._seq_vistos = {}           # (pulsador, seq) -> instante
 
     # ------------------------------------------------------------ consultas
     @property
@@ -68,9 +71,11 @@ class Partida:
         """Devuelve el motivo del descarte, o None si el voto se aceptó."""
         if seq is not None:
             clave = (pulsador_id, seq)
-            if clave in self._seq_vistos:
+            visto_en = self._seq_vistos.get(clave)
+            if visto_en is not None and instante - visto_en <= VENTANA_REENVIO_S:
                 return DUPLICADO
-            self._seq_vistos.append(clave)
+            self._purgar_vistos(instante)
+            self._seq_vistos[clave] = instante
 
         if self.estado != PREGUNTA_ABIERTA:
             return FUERA_DE_VENTANA
@@ -120,8 +125,19 @@ class Partida:
         self.cierra_en = instante + self.encuesta.duracion_de(preg)
         self.esperados = presentes
         self.votos.setdefault(preg.orden, {})
-        self._seq_vistos.clear()            # ver la nota del constructor
         self.estado = PREGUNTA_ABIERTA
+
+    def _purgar_vistos(self, instante):
+        """Saca las claves que ya no pueden corresponder a un reenvío.
+
+        No hace falta en cada voto: el descarte se decide por tiempo, así que
+        una clave vieja de más no cambia el resultado, sólo ocupa memoria.
+        """
+        if len(self._seq_vistos) < 256:
+            return
+        limite = instante - VENTANA_REENVIO_S
+        self._seq_vistos = {k: t for k, t in self._seq_vistos.items()
+                            if t > limite}
 
     def _avanzar(self, instante, presentes):
         if self.idx + 1 < self.total_preguntas:

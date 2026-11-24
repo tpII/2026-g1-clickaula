@@ -122,6 +122,41 @@ def test_la_deduplicacion_sigue_valiendo_dentro_de_la_misma_pregunta():
     assert p.registrar_voto("p1", "A", seq=1, instante=101.2) == DUPLICADO
 
 
+def test_un_reenvio_tardio_no_cae_en_la_pregunta_siguiente():
+    """Hallazgo 3.2.3 de la devolución del Informe de Avance 2.
+
+    En la modalidad anónima la pregunta siguiente abre apenas se cierra la
+    anterior. Un voto emitido al filo del cierre y confirmado recién en el
+    reenvío llegaba con la pregunta nueva abierta y se contabilizaba en ella.
+    """
+    p = Partida(encuesta_anonima(n_preguntas=2))
+    p.comenzar(100.0, 1)
+
+    assert p.registrar_voto("p1", "A", seq=5, instante=129.9) is None
+    p.cerrar(130.0, presentes=1)                 # abre la 2 de inmediato
+    assert p.estado == PREGUNTA_ABIERTA
+    assert p.pregunta_actual().orden == 2
+
+    assert p.registrar_voto("p1", "A", seq=5, instante=130.2) == DUPLICADO
+    assert p.votos_de_actual() == {}             # la pregunta 2 queda limpia
+
+
+def test_pasada_la_ventana_la_misma_secuencia_es_un_reinicio_y_se_acepta():
+    """La contracara del test anterior: no volver a romper la fase 0.
+
+    Más allá de la ventana de reenvío, una secuencia repetida sólo puede
+    venir de un pulsador que arrancó de nuevo, y su voto es válido.
+    """
+    p = Partida(encuesta_anonima(n_preguntas=2))
+    p.comenzar(100.0, 1)
+
+    assert p.registrar_voto("p1", "A", seq=5, instante=129.9) is None
+    p.cerrar(130.0, presentes=1)
+
+    assert p.registrar_voto("p1", "A", seq=5, instante=140.0) is None
+    assert p.votos_de_actual()["p1"].opcion == "A"
+
+
 # ------------------------------------------------------------------ cierres
 def test_vencio_solo_cuando_paso_el_tiempo_con_pregunta_abierta():
     p = Partida(encuesta_competitiva(segundos=10))
